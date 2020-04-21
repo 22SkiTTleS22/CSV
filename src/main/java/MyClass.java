@@ -3,12 +3,14 @@ import java.util.*;
 
 public class MyClass {
 
-    private static final String PATH = "E:\\TT\\CSV\\src\\main\\resources\\sorted\\";
+    private static final String PATH = ".\\src\\main\\resources\\sorted\\";
 
     public static String FilePartSort(File file, Comparator c, int n) {
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             List<String> listString = new ArrayList<String>();
+//            while ((row = csvReader.readLine()) != null) {
+//                String[] data = row.split(",");
             String s = br.readLine();
             while (s != null) {
                 while ((s != null) && (listString.size() != n)) {
@@ -17,7 +19,7 @@ public class MyClass {
                 }
                 Collections.sort(listString, c);
                 count++;
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "file" + count + ".txt"))) {
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "file" + count + ".csv"))) {
                     for (String str : listString) {
                         bw.write(str + "\n");
                     }
@@ -41,11 +43,11 @@ public class MyClass {
                 count++;
                 try (BufferedReader br1 = new BufferedReader(new FileReader(PATH+fileList[0]));
                      BufferedReader br2 = new BufferedReader(new FileReader(PATH+fileList[1]));
-                     BufferedWriter bw = new BufferedWriter(new FileWriter(PATH+"mergedfile" + count + ".txt"))) {
+                     BufferedWriter bw = new BufferedWriter(new FileWriter(PATH+"mergedfile" + count + ".csv"))) {
                     String str1 = br1.readLine();
                     String str2 = br2.readLine();
                     if (!c.equals(Collections.reverseOrder())) {
-                        //по возрастанию вроде
+                        //по возрастанию
                         while (str1 != null && str2 != null) {
                             if (str1.compareTo(str2) > 0) {
                                 bw.write(str2 + "\n");
@@ -72,7 +74,7 @@ public class MyClass {
                             }
                         }
                     } else {
-                        //по убыванию вроде
+                        //по убыванию
                         while (str1 != null && str2 != null) {
                             if (str1.compareTo(str2) > 0) {
                                 bw.write(str1 + "\n");
