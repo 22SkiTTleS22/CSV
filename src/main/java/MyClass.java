@@ -8,7 +8,7 @@ public class MyClass {
     public static String FilePartSort(File file, Comparator c, int n) {
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            List<String> listString = new ArrayList<String>();
+            List<String> listString = new ArrayList<>();
 //            while ((row = csvReader.readLine()) != null) {
 //                String[] data = row.split(",");
             String s = br.readLine();
