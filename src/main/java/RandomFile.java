@@ -7,7 +7,7 @@ public class RandomFile {
 
     private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     private static final SecureRandom RANDOM = new SecureRandom();
-    private static final String PATH = ".\\src\\main\\resources\\";
+    private static final String PATH = "./src/main/resources/";
 
     private static String generate(int count) {
         StringBuilder sb = new StringBuilder();
