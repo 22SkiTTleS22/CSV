@@ -73,7 +73,8 @@ public class TestMyClass {
     @Test
     public void testEmptyFileSort() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "emptyFile" + ".csv"));
+            FileWriter fw = new FileWriter(PATH + "emptyFile" + ".csv");
+            fw.close();
             File file = new File(PATH + "emptyFile.csv");
             File methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 3);
             Assert.fail("Expected EmptyFileException");
