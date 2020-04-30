@@ -15,40 +15,68 @@ public class TestMyClass {
     private static final String PATH = "./src/main/resources/";
 
     @BeforeClass
-    public static void generateFile() {
+    public static void generateFile() throws IOException {
         RandomFile.generateFile(1000000, 5);
     }
 
     @Test
-    public void testFileSort() {
+    public void testFileSortDescending() {
         try {
-            //по убыванию
             File file = new File(PATH + "alphabet.csv");
             File methodResult = MyClass.fileSort(file, Comparator.reverseOrder(), 6);
             File result = new File(PATH + "alphabetDescending.csv");
             assertTrue("The files differ alphabetDescending!", FileUtils.contentEquals(methodResult, result));
             Files.delete(methodResult.toPath());
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 
-            //по возрастанию
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 6);
-            result = new File(PATH + "alphabetAscending.csv");
+    @Test
+    public void testFileSortAscending() {
+        try {
+            File file = new File(PATH + "alphabet.csv");
+            File methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 6);
+            File result = new File(PATH + "alphabetAscending.csv");
             assertTrue("The files differ alphabetAscending!", FileUtils.contentEquals(methodResult, result));
             Files.delete(methodResult.toPath());
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 
-            //когда строк в сортируемом файле кратное numberOfStringsForParts;
-            file = new File(PATH + "data.csv");
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 5);
-            result = new File(PATH + "result.csv");
-            assertTrue("The files differ result 1!", FileUtils.contentEquals(methodResult, result));
+    @Test
+    public void testFileSortMultiple() {
+        try {
+            File file = new File(PATH + "data.csv");
+            File methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 5);
+            File result = new File(PATH + "result.csv");
+            assertTrue("The files differ result Multiple!", FileUtils.contentEquals(methodResult, result));
             Files.delete(methodResult.toPath());
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 
-            //строк в сортируемом файле меньше, чем numberOfStringsForParts;
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 20);
+    @Test
+    public void testFileSortFewer() {
+        try {
+            File file = new File(PATH + "data.csv");
+            File methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 20);
+            File result = new File(PATH + "result.csv");
             assertTrue("The files differ result 2!", FileUtils.contentEquals(methodResult, result));
             Files.delete(methodResult.toPath());
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 
-            //строк в файле больше numberOfStringsForParts и не кратное numberOfStringsForParts.
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 4);
+    @Test
+    public void testFileSortBiggerNoMultiple() {
+        try {
+            File file = new File(PATH + "data.csv");
+            File methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 4);
+            File result = new File(PATH + "result.csv");
             assertTrue("The files differ result 3!", FileUtils.contentEquals(methodResult, result));
             Files.delete(methodResult.toPath());
         } catch (IOException ex) {

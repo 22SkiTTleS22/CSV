@@ -17,15 +17,12 @@ public class RandomFile {
         return sb.toString();
     }
 
-    public static void generateFile(int numberOfStrings, int stringLength) {
+    public static void generateFile(int numberOfStrings, int stringLength) throws IOException {
         RandomFile randomFile = new RandomFile();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "bigdata.csv"))) {
             for (int i = 1; i <= numberOfStrings; ++i) {
                 bw.write(randomFile.generate(stringLength) + "\n");
-                bw.flush();
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 }

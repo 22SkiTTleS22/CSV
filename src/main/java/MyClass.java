@@ -5,8 +5,9 @@ import java.util.*;
 public class MyClass {
 
     private static final String PATH = "./src/main/resources/sorted/";
+    private static final String CSV_EXPANSION = ".csv";
 
-    static File fileSort(File file, Comparator comparator, int numberOfStringsForParts) throws IOException {
+    public static File fileSort(File file, Comparator<String> comparator, int numberOfStringsForParts) throws IOException {
         if (file.length() == 0) {
             return file;
         } else {
@@ -29,7 +30,7 @@ public class MyClass {
     }
 
     private static void writeListToFile(List<String> listOfStrings, int countOfFiles) throws IOException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "file" + countOfFiles + ".csv"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "file" + countOfFiles + CSV_EXPANSION))) {
             for (String elem : listOfStrings) {
                 bw.write(elem + "\n");
             }
@@ -52,7 +53,7 @@ public class MyClass {
     private static void mergeTwoFiles(File file1, File file2, int countOfMergedFiles, Comparator comparator) throws IOException {
         try (BufferedReader br1 = new BufferedReader(new FileReader(file1));
              BufferedReader br2 = new BufferedReader(new FileReader(file2));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "mergedfile" + countOfMergedFiles + ".csv"))) {
+             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "mergedfile" + countOfMergedFiles + CSV_EXPANSION))) {
             String str1 = br1.readLine();
             String str2 = br2.readLine();
             if (comparator.equals(Comparator.naturalOrder())) {
