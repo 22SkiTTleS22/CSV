@@ -3,8 +3,6 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.Comparator;
 
 import org.apache.commons.io.FileUtils;
 
@@ -27,7 +25,7 @@ public class TestMyClass {
             File file = new File(PATH + "alphabet.csv");
             File methodResult = null;
             try {
-                methodResult = MyClass.fileSort(file, Comparator.reverseOrder(), 6);
+                methodResult = MyClass.fileSort(file, SortOrder.DESCENDING, 6);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
@@ -45,7 +43,7 @@ public class TestMyClass {
             File file = new File(PATH + "alphabet.csv");
             File methodResult = null;
             try {
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 6);
+            methodResult = MyClass.fileSort(file, SortOrder.ASCENDING, 6);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
@@ -63,8 +61,8 @@ public class TestMyClass {
             File file = new File(PATH + "data.csv");
             File methodResult = null;
             try {
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 5);
-            } catch (IOException ex) {
+            methodResult = MyClass.fileSort(file, SortOrder.ASCENDING, 5);
+            } catch (Exception ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
             File result = new File(PATH + "result.csv");
@@ -81,7 +79,7 @@ public class TestMyClass {
             File file = new File(PATH + "data.csv");
             File methodResult = null;
             try {
-                methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 20);
+                methodResult = MyClass.fileSort(file, SortOrder.ASCENDING, 20);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
@@ -99,7 +97,7 @@ public class TestMyClass {
             File file = new File(PATH + "data.csv");
             File methodResult = null;
             try {
-            methodResult = MyClass.fileSort(file, Comparator.naturalOrder(), 4);
+            methodResult = MyClass.fileSort(file, SortOrder.ASCENDING, 4);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
@@ -117,7 +115,7 @@ public class TestMyClass {
             File file = new File(PATH + "bigdata.csv");
             File methodResult = null;
             try {
-            methodResult = MyClass.fileSort(file, Collections.reverseOrder(), 10000);
+            methodResult = MyClass.fileSort(file, SortOrder.DESCENDING, 10000);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }
@@ -133,7 +131,7 @@ public class TestMyClass {
             File file = new File(PATH + "emptyFile.csv");
             File methodResult = null;
             try {
-            methodResult = MyClass.fileSort(file, Comparator.reverseOrder(), 6);
+            methodResult = MyClass.fileSort(file, SortOrder.DESCENDING, 6);
             } catch (IOException ex) {
                 fail(FAIL_MESSAGE_FILESORT);
             }

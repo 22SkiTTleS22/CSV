@@ -1,13 +1,28 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class MyClass {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MyClass.class);
     private static final String PATH = "./src/main/resources/sorted/";
     private static final String CSV_EXPANSION = ".csv";
+    private static Comparator<String> comparator;
 
-    public static File fileSort(File file, Comparator<String> comparator, int numberOfStringsForParts) throws IOException {
+    public static File fileSort(File file, SortOrder sortOrder, int numberOfStringsForParts) throws IOException {
+        LOGGER.debug("File sorting");
+        try {
+            setComparator(sortOrder);
+        } catch (SortOrderFormatException ex) {
+            LOGGER.error("Sort order is wrong! Sort order is descending", ex);
+            comparator = Comparator.reverseOrder();
+        }
         if (file.length() == 0) {
             return file;
         } else {
@@ -25,7 +40,17 @@ public class MyClass {
                     listOfStrings.clear();
                 }
             }
-            return mergeParts(comparator);
+            return mergeParts();
+        }
+    }
+
+    private static void setComparator(SortOrder sortOrder) throws SortOrderFormatException {
+        if (sortOrder == SortOrder.DESCENDING) {
+            comparator = Comparator.reverseOrder();
+        } else if (sortOrder == SortOrder.ASCENDING) {
+            comparator = Comparator.naturalOrder();
+        } else {
+            throw new SortOrderFormatException("Wrong sorting order!");
         }
     }
 
@@ -37,12 +62,12 @@ public class MyClass {
         }
     }
 
-    private static File mergeParts(Comparator comparator) throws IOException {
+    private static File mergeParts() throws IOException {
         File dirForFiles = new File(PATH);
         File[] listOfSortedFiles = dirForFiles.listFiles();
         int countOfMergedFiles = 0;
         while (listOfSortedFiles.length > 1) {
-            mergeTwoFiles(listOfSortedFiles[0], listOfSortedFiles[1], ++countOfMergedFiles, comparator);
+            mergeTwoFiles(listOfSortedFiles[0], listOfSortedFiles[1], ++countOfMergedFiles);
             Files.delete(listOfSortedFiles[0].toPath());
             Files.delete(listOfSortedFiles[1].toPath());
             listOfSortedFiles = dirForFiles.listFiles();
@@ -50,7 +75,7 @@ public class MyClass {
         return listOfSortedFiles[0];
     }
 
-    private static void mergeTwoFiles(File file1, File file2, int countOfMergedFiles, Comparator comparator) throws IOException {
+    private static void mergeTwoFiles(File file1, File file2, int countOfMergedFiles) throws IOException {
         try (BufferedReader br1 = new BufferedReader(new FileReader(file1));
              BufferedReader br2 = new BufferedReader(new FileReader(file2));
              BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "mergedfile" + countOfMergedFiles + CSV_EXPANSION))) {
