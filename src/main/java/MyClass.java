@@ -15,12 +15,11 @@ public class MyClass {
     private static final String CSV_EXPANSION = ".csv";
     private static Comparator<String> comparator;
 
-    public static File fileSort(File file, SortOrder sortOrder, int numberOfStringsForParts) throws IOException {
+    public static File fileSort(File file, Comparator<String> comp, int numberOfStringsForParts) throws IOException {
         LOGGER.debug("File sorting");
-        try {
-            setComparator(sortOrder);
-        } catch (SortOrderFormatException ex) {
-            LOGGER.error("Sort order is wrong! Sort order is descending", ex);
+        comparator = comp;
+        if (comp == null) {
+            LOGGER.info("Sort order is wrong! Sort order is descending");
             comparator = Comparator.reverseOrder();
         }
         if (file.length() == 0) {
@@ -41,16 +40,6 @@ public class MyClass {
                 }
             }
             return mergeParts();
-        }
-    }
-
-    private static void setComparator(SortOrder sortOrder) throws SortOrderFormatException {
-        if (sortOrder == SortOrder.DESCENDING) {
-            comparator = Comparator.reverseOrder();
-        } else if (sortOrder == SortOrder.ASCENDING) {
-            comparator = Comparator.naturalOrder();
-        } else {
-            throw new SortOrderFormatException("Wrong sorting order!");
         }
     }
 
@@ -81,33 +70,18 @@ public class MyClass {
              BufferedWriter bw = new BufferedWriter(new FileWriter(PATH + "mergedfile" + countOfMergedFiles + CSV_EXPANSION))) {
             String str1 = br1.readLine();
             String str2 = br2.readLine();
-            if (comparator.equals(Comparator.naturalOrder())) {
-                while (str1 != null && str2 != null) {
-                    if (str1.compareTo(str2) > 0) {
-                        bw.write(str2 + "\n");
-                        str2 = br2.readLine();
-                    } else if (str1.compareTo(str2) < 0) {
-                        bw.write(str1 + "\n");
-                        str1 = br1.readLine();
-                    } else {
-                        bw.write(str1 + "\n" + str2 + "\n");
-                        str1 = br1.readLine();
-                        str2 = br2.readLine();
-                    }
-                }
-            } else {
-                while (str1 != null && str2 != null) {
-                    if (str1.compareTo(str2) > 0) {
-                        bw.write(str1 + "\n");
-                        str1 = br1.readLine();
-                    } else if (str1.compareTo(str2) < 0) {
-                        bw.write(str2 + "\n");
-                        str2 = br2.readLine();
-                    } else {
-                        bw.write(str1 + "\n" + str2 + "\n");
-                        str1 = br1.readLine();
-                        str2 = br2.readLine();
-                    }
+            while (str1 != null && str2 != null) {
+                int compareResult = comparator.compare(str1, str2);
+                if (compareResult < 0) {
+                    bw.write(str1 + "\n");
+                    str1 = br1.readLine();
+                } else if (compareResult > 0) {
+                    bw.write(str2 + "\n");
+                    str2 = br2.readLine();
+                } else {
+                    bw.write(str1 + "\n" + str2 + "\n");
+                    str1 = br1.readLine();
+                    str2 = br2.readLine();
                 }
             }
             if (str1 == null) {
